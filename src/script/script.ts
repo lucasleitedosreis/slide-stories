@@ -11,5 +11,4 @@ if (container && slides && controls && slides.children.length) {
     controls,
     3000
   );
-  slide.show(3);
 }

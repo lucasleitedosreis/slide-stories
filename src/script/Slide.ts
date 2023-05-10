@@ -20,9 +20,15 @@ export default class Slide {
     this.slide = this.slides[this.index];
     this.init();
   }
+
+  //remove a classe active através do index
   hide(el: Element) {
     el.classList.remove("active");
   }
+  //index dos slides
+  //adiciona a classe active
+  //armazena o index
+  //armazena o slid atual
   show(index: number) {
     this.index = index;
     this.slide = this.slides[this.index];
@@ -31,17 +37,29 @@ export default class Slide {
     });
     this.slide.classList.add("active");
   }
-  prev() {}
-  next() {}
+  //----------------------------------------------------
+  prev() {
+    //ternário para voltar slide
+    const prev = this.index > 0 ? this.index - 1 : this.slides.length - 1;
+    this.show(prev);
+  }
+  next() {
+    //ternário para avançar slide
+    const next = this.index + 1 < this.slides.length ? this.index + 1 : 0;
+    this.show(next);
+  }
   private addCOntrols() {
     //criando os botões de controle
     const prevButton = document.createElement("button");
     const nextButton = document.createElement("button");
+    prevButton.innerText = "Slide anterior";
+    nextButton.innerText = "Próximo slide";
     //adicionando os botões de controle
     this.controls.appendChild(prevButton);
     this.controls.appendChild(nextButton);
 
     //Usando a arrow function não precisa fazer o bind
+    //chama os métodos
     prevButton.addEventListener("pointerup", () => this.prev());
     nextButton.addEventListener("pointerup", () => this.next());
   }
