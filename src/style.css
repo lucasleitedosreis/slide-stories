@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+h1 {
+  text-align: center;
+  font-size: 1.5rem;
+}
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+#slide-elements {
+  display: grid;
+}
+#slide-elements > * {
+  grid-area: 1/1;
+  opacity: 0;
+  visibility: none;
+}
+#slide-elements > .active {
+  opacity: 1;
+  visibility: visible;
+}
