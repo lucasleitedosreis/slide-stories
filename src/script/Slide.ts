@@ -72,8 +72,9 @@ export default class Slide {
   //----------------------------------------------------
   //Método para pausar slides
   pause() {
+    console.log("pause");
     this.pausedTimeout = new Timeout(() => {
-      console.log("pause");
+      this.timeout?.pause();
       this.paused = true;
     }, 300);
   }
@@ -84,7 +85,7 @@ export default class Slide {
     this.pausedTimeout?.clear();
     if (this.paused) {
       this.paused = false;
-      this.auto(this.time);
+      this.timeout?.continue();
     }
   }
 
