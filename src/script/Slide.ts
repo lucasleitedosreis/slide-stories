@@ -8,6 +8,8 @@ export default class Slide {
   index: number;
   slide: Element;
   timeout: Timeout | null;
+  pausedTimeout: Timeout | null;
+  paused: boolean;
   constructor(
     container: Element,
     slides: Element[],
@@ -19,6 +21,8 @@ export default class Slide {
     this.controls = controls;
     this.time = time;
 
+    this.pausedTimeout = null;
+    this.paused = false;
     this.timeout = null;
     this.index = 0;
     this.slide = this.slides[this.index];
@@ -53,6 +57,7 @@ export default class Slide {
   //Método dos botões voltar e avançar
   prev() {
     //ternário para voltar slide
+    if (this.paused) return;
     const prev = this.index > 0 ? this.index - 1 : this.slides.length - 1;
     this.show(prev);
   }
@@ -60,8 +65,27 @@ export default class Slide {
   //Método dos botões avançar
   next() {
     //ternário para avançar slide
+    if (this.paused) return;
     const next = this.index + 1 < this.slides.length ? this.index + 1 : 0;
     this.show(next);
+  }
+  //----------------------------------------------------
+  //Método para pausar slides
+  pause() {
+    this.pausedTimeout = new Timeout(() => {
+      console.log("pause");
+      this.paused = true;
+    }, 300);
+  }
+  //----------------------------------------------------
+  //Método para pausar slides
+  continue() {
+    console.log("continue");
+    this.pausedTimeout?.clear();
+    if (this.paused) {
+      this.paused = false;
+      this.auto(this.time);
+    }
   }
 
   //----------------------------------------------------
@@ -76,9 +100,17 @@ export default class Slide {
     this.controls.appendChild(nextButton);
 
     //Usando a arrow function não precisa fazer o bind
-    //chama os métodos
+    //Ativa os métodos ao clicar nos botões voltar e avançar
     prevButton.addEventListener("pointerup", () => this.prev());
     nextButton.addEventListener("pointerup", () => this.next());
+
+    //----------------------------------------------------
+    //Ativa o método pause ao clicar e segurar
+    this.controls.addEventListener("pointerdown", () => this.pause());
+    //----------------------------------------------------
+
+    //Ativa o método pause ao clicar e segurar
+    this.controls.addEventListener("pointerup", () => this.continue());
   }
 
   private init() {
