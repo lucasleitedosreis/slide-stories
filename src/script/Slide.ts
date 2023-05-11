@@ -1,3 +1,5 @@
+import Timeout from "./Timeout.js";
+
 export default class Slide {
   container: Element;
   slides: Element[];
@@ -5,26 +7,29 @@ export default class Slide {
   time: number;
   index: number;
   slide: Element;
+  timeout: Timeout | null;
   constructor(
     container: Element,
     slides: Element[],
     controls: Element,
-    time: number = 5000
+    time: number = 3000
   ) {
     this.container = container;
     this.slides = slides;
     this.controls = controls;
     this.time = time;
 
+    this.timeout = null;
     this.index = 0;
     this.slide = this.slides[this.index];
     this.init();
   }
-
+  //----------------------------------------------------
   //remove a classe active através do index
   hide(el: Element) {
     el.classList.remove("active");
   }
+  //----------------------------------------------------
   //index dos slides
   //adiciona a classe active
   //armazena o index
@@ -36,18 +41,30 @@ export default class Slide {
       this.hide(el);
     });
     this.slide.classList.add("active");
+    this.auto(this.time);
   }
   //----------------------------------------------------
+  //Métodos para slides avançarem automaticamente
+  auto(time: number) {
+    this.timeout?.clear();
+    this.timeout = new Timeout(() => this.next(), time);
+  }
+  //----------------------------------------------------
+  //Método dos botões voltar e avançar
   prev() {
     //ternário para voltar slide
     const prev = this.index > 0 ? this.index - 1 : this.slides.length - 1;
     this.show(prev);
   }
+  //----------------------------------------------------
+  //Método dos botões avançar
   next() {
     //ternário para avançar slide
     const next = this.index + 1 < this.slides.length ? this.index + 1 : 0;
     this.show(next);
   }
+
+  //----------------------------------------------------
   private addCOntrols() {
     //criando os botões de controle
     const prevButton = document.createElement("button");
