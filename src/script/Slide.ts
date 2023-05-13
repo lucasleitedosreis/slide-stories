@@ -34,6 +34,7 @@ export default class Slide {
   //remove a classe active através do index
   hide(el: Element) {
     el.classList.remove("active");
+    //Pausa e zera o video
     if (el instanceof HTMLVideoElement) {
       el.currentTime = 0;
       el.pause();
@@ -58,6 +59,8 @@ export default class Slide {
       this.auto(this.time);
     }
   }
+  //----------------------------------------------------
+  //Muta o video, inicia o video, calcula o tempo de duração do video
   autoVideo(video: HTMLVideoElement) {
     let firstPlay = true;
     video.muted = true;
@@ -109,6 +112,17 @@ export default class Slide {
     }
   }
 
+  private addThumbItems() {
+    const thumbContainer = document.createElement("div");
+    thumbContainer.id = "slide-thumb";
+    for (let i = 0; i < this.slides.length; i++) {
+      thumbContainer.innerHTML += `
+      <span><span class="thumb-item"></span></span>
+      `;
+    }
+    this.controls.appendChild(thumbContainer);
+  }
+
   //----------------------------------------------------
   private addCOntrols() {
     //criando os botões de controle
@@ -136,6 +150,7 @@ export default class Slide {
 
   private init() {
     this.addCOntrols();
+    this.addThumbItems();
     this.show(this.index);
   }
 }

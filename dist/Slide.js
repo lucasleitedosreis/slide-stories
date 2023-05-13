@@ -88,6 +88,16 @@ export default class Slide {
                 this.slide.play();
         }
     }
+    addThumbItems() {
+        const thumbContainer = document.createElement("div");
+        thumbContainer.id = "slide-thumb";
+        for (let i = 0; i < this.slides.length; i++) {
+            thumbContainer.innerHTML += `
+      <span><span class="thumb-item"></span></span>
+      `;
+        }
+        this.controls.appendChild(thumbContainer);
+    }
     addCOntrols() {
         const prevButton = document.createElement("button");
         const nextButton = document.createElement("button");
@@ -102,6 +112,7 @@ export default class Slide {
     }
     init() {
         this.addCOntrols();
+        this.addThumbItems();
         this.show(this.index);
     }
 }
