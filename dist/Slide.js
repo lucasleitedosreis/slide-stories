@@ -9,6 +9,8 @@ export default class Slide {
     timeout;
     pausedTimeout;
     paused;
+    thumbItems;
+    thumbActive;
     constructor(container, slides, controls, time = 3000) {
         this.container = container;
         this.slides = slides;
@@ -21,6 +23,8 @@ export default class Slide {
             ? Number(localStorage.getItem("activeSlide"))
             : 0;
         this.slide = this.slides[this.index];
+        this.thumbItems = null;
+        this.thumbActive = null;
         this.init();
     }
     hide(el) {
@@ -34,6 +38,11 @@ export default class Slide {
         this.index = index;
         this.slide = this.slides[this.index];
         localStorage.setItem("activeSlide", String(index));
+        if (this.thumbItems) {
+            this.thumbActive = this.thumbItems[this.index];
+            this.thumbItems.forEach((el) => el.classList.remove("active"));
+            this.thumbActive.classList.add("active");
+        }
         this.slides.forEach((el) => {
             this.hide(el);
         });
@@ -58,6 +67,9 @@ export default class Slide {
     auto(time) {
         this.timeout?.clear();
         this.timeout = new Timeout(() => this.next(), time);
+        if (this.thumbActive) {
+            this.thumbActive.style.animationDuration = `${time}ms`;
+        }
     }
     prev() {
         if (this.paused)
@@ -75,6 +87,7 @@ export default class Slide {
         this.pausedTimeout = new Timeout(() => {
             this.timeout?.pause();
             this.paused = true;
+            this.thumbActive?.classList.add("paused");
             if (this.slide instanceof HTMLVideoElement)
                 this.slide.pause();
         }, 300);
@@ -82,21 +95,12 @@ export default class Slide {
     continue() {
         this.pausedTimeout?.clear();
         if (this.paused) {
+            this.thumbActive?.classList.remove("paused");
             this.paused = false;
             this.timeout?.continue();
             if (this.slide instanceof HTMLVideoElement)
                 this.slide.play();
         }
-    }
-    addThumbItems() {
-        const thumbContainer = document.createElement("div");
-        thumbContainer.id = "slide-thumb";
-        for (let i = 0; i < this.slides.length; i++) {
-            thumbContainer.innerHTML += `
-      <span><span class="thumb-item"></span></span>
-      `;
-        }
-        this.controls.appendChild(thumbContainer);
     }
     addCOntrols() {
         const prevButton = document.createElement("button");
@@ -109,6 +113,17 @@ export default class Slide {
         nextButton.addEventListener("pointerup", () => this.next());
         this.controls.addEventListener("pointerdown", () => this.pause());
         this.controls.addEventListener("pointerup", () => this.continue());
+    }
+    addThumbItems() {
+        const thumbContainer = document.createElement("div");
+        thumbContainer.id = "slide-thumb";
+        for (let i = 0; i < this.slides.length; i++) {
+            thumbContainer.innerHTML += `
+      <span><span class="thumb-item"></span></span>
+      `;
+        }
+        this.controls.appendChild(thumbContainer);
+        this.thumbItems = Array.from(document.querySelectorAll(".thumb-item"));
     }
     init() {
         this.addCOntrols();

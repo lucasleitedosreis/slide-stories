@@ -59,12 +59,15 @@ video {
   overflow: hidden;
   isolation: isolate;
 }
-#slide-thumb .thumb-item {
+#slide-thumb .thumb-item.active {
   display: block;
   height: inherit;
   background: rgba(255, 255, 255, 0.9);
   transform: translateX(-100%);
-  animation: thumb 3s forwards linear running;
+  animation: thumb forwards linear running;
+}
+#slide-thumb .thumb-item.paused {
+  animation-play-state: paused;
 }
 @keyframes thumb {
   to {
