@@ -113,6 +113,7 @@ export default class Slide {
   //----------------------------------------------------
   //Método para pausar slides
   pause() {
+    document.body.classList.add("paused");
     this.pausedTimeout = new Timeout(() => {
       this.timeout?.pause();
       this.paused = true;
@@ -124,6 +125,7 @@ export default class Slide {
   //----------------------------------------------------
   //Método para pausar slides
   continue() {
+    document.body.classList.remove("paused");
     this.pausedTimeout?.clear();
     if (this.paused) {
       //play na animação da thumb
@@ -154,7 +156,8 @@ export default class Slide {
     this.controls.addEventListener("pointerdown", () => this.pause());
     //----------------------------------------------------
     //Ativa o método pause ao clicar e segurar
-    this.controls.addEventListener("pointerup", () => this.continue());
+    document.addEventListener("pointerup", () => this.continue());
+    document.addEventListener("touchend", () => this.continue());
   }
 
   //----------------------------------------------------
