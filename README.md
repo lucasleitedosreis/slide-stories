@@ -8,6 +8,8 @@ Plataforma de Cursos: Origamid
 
 Professor : André Rafael
 
+Aluno: Lucas Leite
+
 <h3>Desenvolvido com:</h3>
 
  <ul>
@@ -16,7 +18,7 @@ Professor : André Rafael
  </ul>
 
 <hr>
-<h3>Imagens doprojeto</h3>
+<h3>Imagens do projeto</h3>
 
 <img width="800" src="/assets/readme/slides-stories-1.png">
 
